@@ -3,20 +3,15 @@ package com.example.blog.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
+public class CategoryResponse {
     String id;
-    String username;
     String name;
-    String email;
-    LocalDate dob;
-    Boolean enabled;
-    Set<RoleResponse> roles;
+    List<CategoryPostResponse> posts;
 }

@@ -32,13 +32,14 @@ public class PostService {
     UserRepository userRepository;
     CategoryRepository categoryRepository;
     VoteRepository voteRepository;
+    RedisService redisService;
 
     public PostUserResponse createPost(PostRequest request){
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Category category = categoryRepository.findById(request.getCategory())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_EXISTED));
+                        .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_EXISTED));
 
         user.getBans().stream()
                 .filter(ban -> ban.getBanAction() == BanAction.POST)
@@ -55,14 +56,26 @@ public class PostService {
         post.setUpdateAt(null);
 
         post = postRepository.save(post);
+        redisService.deleteValue("post::list::user");//Xóa cache
         return postMapper.toPostUserResponse(post);
     }
 
     public List<PostUserResponse> getAllPostsForUser(){
-        return postRepository.findAll().stream()
-//                .map(postMapper::toPostUserResponse)
-                .map(this::buildPostUserResponse)//sử dụng hàm dưới
+        String redisKey = "post::list::user";
+        if(redisService.hasKey(redisKey)){
+            return redisService.getValue(redisKey, List.class);
+        }
+
+        List<PostUserResponse> responses = postRepository.findAll().stream()
+                .map(this::buildPostUserResponse)
                 .toList();
+
+        redisService.setValue(redisKey, responses, 10);
+        return responses;
+//        return postRepository.findAll().stream()
+////                .map(postMapper::toPostUserResponse)
+//                .map(this::buildPostUserResponse)//sử dụng hàm dưới
+//                .toList();
     }
 
     public List<PostAdminResponse> getAllPostForAdmin(){
@@ -72,16 +85,33 @@ public class PostService {
     }
 
     public PostUserResponse getPostForUserById(String id){
+        String redisKey = "post::user::" + id;
+        if(redisService.hasKey(redisKey)){
+            return redisService.getValue(redisKey, PostUserResponse.class);
+        }
+
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_EXISTED));
 
-        return buildPostUserResponse(post); //Sử dụng hàm dưới, không dùng mapper???
+        PostUserResponse response = buildPostUserResponse(post);
+        redisService.setValue(redisKey, response, 10);
+
+        return response;
+//        return buildPostUserResponse(post); //Sử dụng hàm dưới, không dùng mapper???
     }
 
     public PostAdminResponse getPostForAdminById(String id){
+        String redisKey = "post::admin::" + id;
+        if(redisService.hasKey(redisKey)){
+            return redisService.getValue(redisKey, PostAdminResponse.class);
+        }
+
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_EXISTED));
-        return postMapper.toPostAdminResponse(post);
+        PostAdminResponse response = postMapper.toPostAdminResponse(post);
+        redisService.setValue(redisKey, response, 10);
+        return response;
+//        return postMapper.toPostAdminResponse(post);
     }
 
     public PostUserResponse updatePost(String id, PostRequest request){
@@ -105,8 +135,13 @@ public class PostService {
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
         post.setUpdateAt(LocalDateTime.now());
+        Post saved = postRepository.save(post);
 
-        return postMapper.toPostUserResponse(postRepository.save(post));
+        PostUserResponse response = postMapper.toPostUserResponse(saved);
+        redisService.setValue("post::user::" + id, response, 10);
+        redisService.deleteValue("post::list::user");
+
+        return response;
     }
 
     public void deletePost(String id){
@@ -125,6 +160,10 @@ public class PostService {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
         postRepository.delete(post);
+        //Xóa cache danh sách và bài viết
+        redisService.deleteValue("post::user::" + id);
+        redisService.deleteValue("post::admin::" + id);
+        redisService.deleteValue("post::list::user");
     }
 
     private PostUserResponse buildPostUserResponse(Post post){

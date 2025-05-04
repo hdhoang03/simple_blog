@@ -29,6 +29,8 @@ public class SecurityConfig {
             "/mail/send", "/mail/verify-email",
             "/post/**", "/post/all-post",
             "/comment/**",
+            "/categories", "/categories/get-name",
+            "/vote/*/upvotes", "/vote/*/downvotes"
     };
 
     private final String[] ADMIN_ENDPOINTS = {""

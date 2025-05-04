@@ -12,5 +12,5 @@ import lombok.experimental.FieldDefaults;
 @JsonInclude(JsonInclude.Include.NON_NULL)//chỉ serialize các giá trị không null
 public class CommentRequest {
     String content;
-    String postId;
+//    String postId; //Bỏ
 }

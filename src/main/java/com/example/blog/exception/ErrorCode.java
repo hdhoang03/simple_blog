@@ -15,7 +15,7 @@ public enum ErrorCode {
     USER_BANNED_FROM_POSTING(0001,"User is banned form posting", HttpStatus.BAD_REQUEST),
     USER_BANNED_FROM_COMMENTING(0002, "User is banned from commenting", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1003, "Unauthenticated", HttpStatus.UNAUTHORIZED),
-    USERNAME_EXISTED(1004, "Username has been existed", HttpStatus.BAD_REQUEST),
+    CATEGORY_EXISTED(1004, "Category has been existed", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(1005, "User not existed", HttpStatus.NOT_FOUND),
     POST_NOT_EXISTED(1006, "Post not existed", HttpStatus.NOT_FOUND),
     COMMENT_NOT_FOUND(1007, "Cart not found", HttpStatus.NOT_FOUND),

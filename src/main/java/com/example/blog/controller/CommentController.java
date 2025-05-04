@@ -18,11 +18,11 @@ import java.util.List;
 public class CommentController {
     CommentService commentService;
 
-    @PostMapping
-    ApiResponse<CommentResponse> createComment(@RequestBody CommentRequest request){
+    @PostMapping("/{postId}")
+    ApiResponse<CommentResponse> createComment(@PathVariable String postId, @RequestBody CommentRequest request){
         return ApiResponse.<CommentResponse>builder()
                 .code(1000)
-                .result(commentService.createComment(request))
+                .result(commentService.createComment(postId, request))
                 .build();
     }
 
@@ -34,7 +34,7 @@ public class CommentController {
                 .build();
     }
 
-    @PutMapping("/edit/{commendId}")
+    @PutMapping("/edit/{commentId}")
     ApiResponse<CommentResponse> editComment(@PathVariable String commentId , @RequestBody CommentRequest request){
         return ApiResponse.<CommentResponse>builder()
                 .code(1000)

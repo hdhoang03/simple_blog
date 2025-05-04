@@ -23,6 +23,7 @@ public class User {
     String username;
     String password;
     String name;
+    @Column(name = "email", unique = true)
     String email;
     LocalDate dob;
     Boolean enabled; //Chặn tài khoản không cho đăng nhập

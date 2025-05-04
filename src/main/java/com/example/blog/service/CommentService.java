@@ -18,7 +18,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,8 +30,8 @@ public class CommentService {
     CommentRepository commentRepository;
     PostRepository postRepository;
 
-    public CommentResponse createComment(CommentRequest request){
-        Post post = postRepository.findById(request.getPostId())
+    public CommentResponse createComment(String postId, CommentRequest request){
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new AppException(ErrorCode.POST_NOT_EXISTED));
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

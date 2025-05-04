@@ -4,19 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)//chỉ serialize các giá trị không null
-public class UserUpdateRequest {
-    String password;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CategoryRequest {
     String name;
-    LocalDate dob;
-//    String email;
-//    List<String> roles;
+    String description;
 }

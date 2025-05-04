@@ -23,10 +23,17 @@ public class Post {
     LocalDateTime createAt;
     LocalDateTime updateAt;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Comment> comments;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     User user;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    Category category;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Vote> votes;
 }

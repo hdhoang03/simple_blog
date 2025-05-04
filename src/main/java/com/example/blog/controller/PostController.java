@@ -27,7 +27,7 @@ public class PostController {
                 .build();
     }
 
-    @GetMapping("/all-post")
+    @GetMapping("/all-posts")
     ApiResponse<List<PostUserResponse>> getAllPostsForUser(){
         return ApiResponse.<List<PostUserResponse>>builder()
                 .code(1000)
@@ -51,7 +51,7 @@ public class PostController {
                 .build();
     }
 
-    @GetMapping("/admin/all-post")
+    @GetMapping("/admin/all-posts")
     ApiResponse<List<PostAdminResponse>> getAllPostsForAdmin(){
         return ApiResponse.<List<PostAdminResponse>>builder()
                 .code(1000)
