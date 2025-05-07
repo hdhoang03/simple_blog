@@ -1,5 +1,6 @@
 package com.example.blog.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,6 +17,7 @@ public class UserResponse {
     String username;
     String name;
     String email;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate dob;
     Boolean enabled;
     Set<RoleResponse> roles;

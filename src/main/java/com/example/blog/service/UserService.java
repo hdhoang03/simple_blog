@@ -93,7 +93,7 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUser(){
         return userRepository.findAll()
                 .stream()//thay vì dùng for dùng stream sẽ gọn hơn
