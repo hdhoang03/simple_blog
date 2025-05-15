@@ -37,9 +37,9 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS = {"/users", "/auth/**",
             "/mail/send", "/mail/verify-email",
-            "/post/**", "/post/all-post",
+            "/post/**", "/post/all-post", "/post/search",
             "/comment/**",
-            "/categories", "/categories/get-name",
+            "/categories/get-name", "categories/**",
             "/vote/*/upvotes", "/vote/*/downvotes",
             "/ws/**"
     };

@@ -3,6 +3,7 @@ package com.example.blog.service;
 import com.example.blog.constaint.BanAction;
 import com.example.blog.dto.request.PostRequest;
 import com.example.blog.dto.response.PostAdminResponse;
+import com.example.blog.dto.response.PostListResponse;
 import com.example.blog.dto.response.PostUserResponse;
 import com.example.blog.entity.Category;
 import com.example.blog.entity.Post;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -93,7 +95,7 @@ public class PostService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
-        User user =post.getUser();
+        User user = post.getUser();
         user.getBans().stream()
                 .filter(ban -> ban.getBanAction() == BanAction.POST)
                 .filter(ban -> ban.getExpiredAt() == null || ban.getExpiredAt().isAfter(LocalDateTime.now()))
@@ -125,6 +127,18 @@ public class PostService {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
         postRepository.delete(post);
+    }
+
+    public PostListResponse getAllPostsByTitle(String title){
+        List<Post> posts = postRepository.findByTitle(title);
+        if(posts.isEmpty()){
+            throw new AppException(ErrorCode.POST_NOT_EXISTED);
+        }
+        List<PostUserResponse> responseList = posts.stream()
+                .map(postMapper::toPostUserResponse)
+                .collect(Collectors.toList());
+
+        return new PostListResponse(responseList);
     }
 
     private PostUserResponse buildPostUserResponse(Post post){

@@ -31,17 +31,20 @@ public class ChatController {
         log.info("Received payload: {}", request);
         if (principal == null) {
             log.error("No authenticated user found");
+            return null;
         }
         String toUser = request.getTo();
         String fromUser = principal.getName();
+
         log.info("Username: " + fromUser);
-
-
         request.setFrom(fromUser);
         request.setTimestamp(LocalDateTime.now());
+
         log.info("Received message from {} to {}: {}", fromUser, toUser, request.getContent());
+
         simpMessagingTemplate.convertAndSendToUser(toUser, "/private", request);
-//        simpMessagingTemplate.convertAndSendToUser(fromUser, "/private", request); // Gửi lại cho người gửi
+        simpMessagingTemplate.convertAndSendToUser(fromUser, "/private", request); // Gửi lại cho người gửi
+
         chatService.saveMessage(request);
         log.info("Private message from {} to {}: {}", request.getFrom(), toUser, request.getContent());
         return request;

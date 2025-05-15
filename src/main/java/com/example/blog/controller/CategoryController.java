@@ -35,11 +35,11 @@ public class CategoryController {
                 .build();
     }
 
-    @GetMapping
-    ApiResponse<List<CategoryResponse>> getAllCategories(){
+    @GetMapping("/{categoryId}")
+    ApiResponse<List<CategoryResponse>> getAllPostsFromCategory(@PathVariable String categoryId){
         return ApiResponse.<List<CategoryResponse>>builder()
                 .code(1000)
-                .result(categoryService.getAllCategories())
+                .result(categoryService.getAllPostsFromCategory(categoryId))
                 .build();
     }
 

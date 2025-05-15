@@ -3,6 +3,7 @@ package com.example.blog.controller;
 import com.example.blog.dto.ApiResponse;
 import com.example.blog.dto.request.PostRequest;
 import com.example.blog.dto.response.PostAdminResponse;
+import com.example.blog.dto.response.PostListResponse;
 import com.example.blog.dto.response.PostUserResponse;
 import com.example.blog.service.PostService;
 import lombok.AccessLevel;
@@ -32,6 +33,14 @@ public class PostController {
         return ApiResponse.<List<PostUserResponse>>builder()
                 .code(1000)
                 .result(postService.getAllPostsForUser())
+                .build();
+    }
+
+    @GetMapping("/search")
+    ApiResponse<PostListResponse> getAllPostsByTitle(@RequestParam String postTitle){
+        return ApiResponse.<PostListResponse>builder()
+                .code(1000)
+                .result(postService.getAllPostsByTitle(postTitle))
                 .build();
     }
 

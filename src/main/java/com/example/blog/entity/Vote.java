@@ -20,6 +20,7 @@ public class Vote {
     UUID id;
 
     @ManyToOne
+//    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey)
     User user;
 
     @ManyToOne

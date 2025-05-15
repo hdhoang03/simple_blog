@@ -40,8 +40,8 @@ public class CategoryService {
                 .toList();
     }
 
-    public List<CategoryResponse> getAllCategories(){
-        return categoryRepository.findAll()
+    public List<CategoryResponse> getAllPostsFromCategory(String categoryId){
+        return categoryRepository.findById(categoryId)
                 .stream()
                 .map(categoryMapper::toCategoryResponse)
                 .toList();
