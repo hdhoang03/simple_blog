@@ -19,6 +19,9 @@ public class Post {
     String id;
 
     String title;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String content;
     LocalDateTime createAt;
     LocalDateTime updateAt;

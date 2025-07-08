@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -114,6 +115,13 @@ public class UserService {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(userName).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return userMapper.toUserResponse(user);
+    }
+
+    public List<UserResponse> searchUserByUsername(String keyword){
+        List<User> users = userRepository.findByUsernameContaining(keyword);
+        return users.stream()
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
     }
 
     //Tạo ngẫu nhiên xác thực 6 số

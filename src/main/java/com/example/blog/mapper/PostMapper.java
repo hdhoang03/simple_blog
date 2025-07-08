@@ -1,6 +1,7 @@
 package com.example.blog.mapper;
 
 import com.example.blog.dto.request.PostRequest;
+import com.example.blog.dto.response.CategoryPostResponse;
 import com.example.blog.dto.response.PostAdminResponse;
 import com.example.blog.dto.response.PostUserResponse;
 import com.example.blog.entity.Post;
@@ -21,4 +22,7 @@ public interface PostMapper {
     @Mapping(expression = "java(post.getVotes() != null ? (int) post.getVotes().size() : 0)", target = "upvotes")
     @Mapping(expression = "java(post.getVotes() != null ? (int) post.getVotes().size() : 0)", target = "downvotes")
     PostUserResponse toPostUserResponse(Post post);
+
+    @Mapping(source = "user.username", target = "username")
+    CategoryPostResponse toCategoryPostResponse(Post post);
 }

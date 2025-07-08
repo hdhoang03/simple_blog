@@ -36,6 +36,14 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/admin/search")
+    ApiResponse<List<UserResponse>> searchUserByUsername(@RequestParam String keyword){
+        return ApiResponse.<List<UserResponse>>builder()
+                .code(1000)
+                .result(userService.searchUserByUsername(keyword))
+                .build();
+    }
+
     @GetMapping("/my-info")
     ApiResponse<UserResponse> getMyInfo(){
         return ApiResponse.<UserResponse>builder()

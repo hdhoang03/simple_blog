@@ -9,6 +9,7 @@ import com.example.blog.service.PostService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,18 +30,21 @@ public class PostController {
     }
 
     @GetMapping("/all-posts")
-    ApiResponse<List<PostUserResponse>> getAllPostsForUser(){
-        return ApiResponse.<List<PostUserResponse>>builder()
+    ApiResponse<PostListResponse> getAllPostsForUser(@RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size){
+        return ApiResponse.<PostListResponse>builder()
                 .code(1000)
-                .result(postService.getAllPostsForUser())
+                .result(postService.getAllPostsForUser(page, size))
                 .build();
     }
 
     @GetMapping("/search")
-    ApiResponse<PostListResponse> getAllPostsByTitle(@RequestParam String postTitle){
+    ApiResponse<PostListResponse> getAllPostsByTitle(@RequestParam String postTitle,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "10") int size){
         return ApiResponse.<PostListResponse>builder()
                 .code(1000)
-                .result(postService.getAllPostsByTitle(postTitle))
+                .result(postService.getAllPostsByTitle(postTitle, page, size))
                 .build();
     }
 

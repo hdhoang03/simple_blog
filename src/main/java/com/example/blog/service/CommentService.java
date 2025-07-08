@@ -15,12 +15,13 @@ import com.example.blog.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Slf4j
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -38,14 +39,13 @@ public class CommentService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        user.getBans().stream()
-                .filter(ban -> ban.getBanAction() == BanAction.COMMENT)
-                .filter(ban -> ban.getExpiredAt() == null || ban.getExpiredAt().isAfter(LocalDateTime.now()))
-                .findAny()
-                .ifPresent(ban -> {
-                    throw new AppException(ErrorCode.USER_BANNED_FROM_COMMENTING);
-                });
-
+//        user.getBans().stream()
+//                .filter(ban -> ban.getBanAction() == BanAction.COMMENT)
+//                .filter(ban -> ban.getExpiredAt() == null || ban.getExpiredAt().isAfter(LocalDateTime.now()))
+//                .findAny()
+//                .ifPresent(ban -> {
+//                    throw new AppException(ErrorCode.USER_BANNED_FROM_COMMENTING);
+//                });
         Comment comment = commentMapper.toComment(request);
         comment.setUser(user);
         comment.setPost(post);

@@ -27,11 +27,11 @@ public class ChatController {
     ChatService chatService;
 
     @MessageMapping("/chat.private")
-    public MessageRequest sendPrivateMessage(@Payload MessageRequest request, Principal principal){
+    public void sendPrivateMessage(@Payload MessageRequest request, Principal principal){
         log.info("Received payload: {}", request);
         if (principal == null) {
             log.error("No authenticated user found");
-            return null;
+            return;
         }
         String toUser = request.getTo();
         String fromUser = principal.getName();
@@ -47,7 +47,7 @@ public class ChatController {
 
         chatService.saveMessage(request);
         log.info("Private message from {} to {}: {}", request.getFrom(), toUser, request.getContent());
-        return request;
+//        return request;
     }
 
     @GetMapping("/chat/history/{user1}/{user2}")

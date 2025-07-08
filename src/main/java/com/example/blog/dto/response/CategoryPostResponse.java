@@ -11,4 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class CategoryPostResponse {
     String id;
     String title;
+    String username;//Mới thêm
 }

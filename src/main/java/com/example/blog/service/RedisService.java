@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RedisService {
     RedisTemplate<String, Object> redisTemplate;
+    ObjectMapper objectMapper;
 
     public void setValue(String key, Object value, long timeOutInMinutes){
         redisTemplate.opsForValue().set(key, value, timeOutInMinutes, TimeUnit.MINUTES);
@@ -21,7 +22,7 @@ public class RedisService {
 
     public <T> T getValue(String key, Class<T> clazz){
         Object raw = redisTemplate.opsForValue().get(key);
-        return raw == null ? null : new ObjectMapper().convertValue(raw, clazz);
+        return raw == null ? null : objectMapper.convertValue(raw, clazz);
 //        return redisTemplate.opsForValue().get(key);
     }
 

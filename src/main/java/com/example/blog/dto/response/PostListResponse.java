@@ -12,4 +12,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PostListResponse {
     List<PostUserResponse> posts;
+    int currentPage;
+    int totalPages;
+    int totalElements;
+    int pageSize;
 }
